@@ -13,7 +13,7 @@ services:
       - "3306:3306"
     networks:
       - wordpress-network
-
+  
   wordpress:
     depends_on:
       - db
@@ -22,7 +22,7 @@ services:
       - "80:80"
     restart: always
     volumes:
-      - efs:/var/www/html
+      - /mnt/efs/lucas-emanoel/var/www/html:/var/www/html
     environment:
       TZ: America/Recife
       WORDPRESS_DB_HOST: db
@@ -35,11 +35,3 @@ services:
 networks:
   wordpress-network:
     driver: bridge
-
-volumes:
-  efs:
-    driver: efs
-    driver_opts:
-      type: nfs
-      o: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
-      device: "fs-0deae370ba136fba4.efs.us-east-1.amazonaws.com:/"
