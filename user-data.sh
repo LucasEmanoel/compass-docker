@@ -2,6 +2,8 @@
 
 sudo yum update -y
 sudo yum install -y docker
+sudo yum install -y amazon-efs-utils
+
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
@@ -11,13 +13,6 @@ sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 sudo mv /usr/local/bin/docker-compose /bin/docker-compose
 
-cat <<EOF >/home/ec2-user/docker-compose.yml
-version: "3.3"
-services:
-  apache:
-    image: httpd:latest
-    ports:
-    -  80:80
-EOF
+sudo curl -sL https://raw.githubusercontent.com/LucasEmanoel/compass-docker/main/docker-compose.yml --output /home/ec2-user/docker-compose.yml
 
 /bin/docker-compose -f /home/ec2-user/docker-compose.yml up -d
