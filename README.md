@@ -8,7 +8,7 @@
   <img src = "https://img.shields.io/badge/Made%20by-Lucas%20Emanoel-purple" alt = "Lucas Emanoel">
   <img src = "https://img.shields.io/badge/Project%20Lang-Portugueses%20BR-lightgreen" alt = "Project Lang">
   <img src = "https://badgen.net/badge/icon/github?icon=github&label" alt = "Github">
-  <img src = "https://svgshare.com/i/Zhy.svg" alt = "linux">
+  <img src = "https://svgshare.com/i/Zhy.svg" alt = "Linux">
 </p>
 
 <br />
@@ -21,7 +21,7 @@
   <h2 align="center">Atividade Prática</h2>
 
   <p align="center">
-    Iniciar uma instância na aws, configurar docker para wordpress e mysql!
+    Iniciar uma instância na aws, configurar docker para WordPress e mysql!
     <br />
     <a href="#"><strong>Explore a documentação »</strong></a>
     <br />
@@ -34,9 +34,9 @@ O projeto consiste em rodar em dois containers dentro de uma instancia ec2, uma 
 
 Colocar Imagem aqui
 
-embora descrito, nao utilizaremos o auto scalling group para esse tutorial. 
+embora descrito, nao utilizaremos o auto scaling group para esse tutorial. 
 
-# Realease 1.0.0
+# Release 1.0.0
 
 ## Configurando o user_data
 
@@ -62,16 +62,16 @@ echo "fs-00551b6438692354b.efs.us-east-1.amazonaws.com:/ /mnt/efs nfs defaults 0
 ```
 
 * Use o yum para instalar o docker e efs utils.
-* Devemos habilitar o servico e da permisao para o ec2-user rodar comandos docker.
-* utilizamos os comandos de instalacao do [docker-compose](https://docs.docker.com/compose/install/)
-* Daremos permissao para o user ec2, poder rodar o docker-compose.
-* Por fim, motaremos o EFS que vamos utilizar e utilizaremos o arquivo fstab para manter o mount apos desligar.
+* Devemos habilitar o serviço e da permissão para o ec2-user rodar comandos docker.
+* utilizamos os comandos de instalação do [docker-compose](https://docs.docker.com/compose/install/)
+* Daremos permissão para o user ec2, poder rodar o docker-compose.
+* Por fim, montamos o EFS que vamos utilizar e utilizaremos o arquivo fstab para manter o mount apos desligar.
 * Agora nossa instancia esta devidamente configurada, com docker e docker-compose instalados.
 
-# Realese 2.0.0 
+# Release 2.0.0 
 ## Instalando MySql e WordPress via docker-compose.
 
-* Vamos configurar o docker-compose para instalar nosso servico de banco de dados.
+* Vamos configurar o docker-compose para instalar nosso serviço de banco de dados.
 
 ```yml
 version: '3.3'
@@ -116,16 +116,16 @@ networks:
 
 * sempre utilizaremos a ultima versão do mysql.
 * Se o Mysql nao inicie corretamente, reiniciara sempre.
-* Devemos configurar o env: senha do root, usuario, senha do usuario e nome da base dados. 
+* Devemos configurar o env: senha do root, usuário, senha do usuário e nome da base dados. 
 * rodaremos na porta 3306 do host.
 * utilizaremos uma network do docker para conectar WordPress + mysql.
-* como o servico do wordpress depende do mysql, utilizamos a tag depends_on.
-* para volumes passaremos o caminho onde nosso efs estara montado.
+* como o serviço do wordpress depende do mysql, utilizamos a tag depends_on.
+* para volumes passaremos o caminho onde nosso efs estará montado.
 * por fim devemos configurar o env do wordpress de acordo com o mysql.
 
-### Execucao do docker-compose
+### Execução do docker-compose
 
-* Voltaremos ao user_data para executar o comando do composer sempre que a instancia for criada.
+* Voltaremos ao user_data para executar o comando do docker compose sempre que a instancia for criada.
 
 ```bash
 curl -sL https://raw.githubusercontent.com/LucasEmanoel/compass-docker/main/docker-compose.yml --output /home/ec2-user/docker-compose.yml
@@ -152,7 +152,7 @@ docker-compose -f /home/ec2-user/docker-compose.yml up -d
   * [x] Configure o docker e docker-compose no host.
   * [x] Crie um file docker-compose.yml, com wordpress e mysql. 
   * [] vincule os arquivos do container do wordpress ao um EFS.
-* [] Configure um LoadBalancer, para ser o acesso da aplicacao.
+* [] Configure um LoadBalancer, para ser o acesso da aplicação.
 
 <p align="right"><a href="#compass-uol">volte pra o inicio</a></p>
 
