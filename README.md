@@ -143,7 +143,7 @@ docker-compose -f /home/ec2-user/docker-compose.yml up -d
     * Launch Instances > Advanced details > User data.
 2. Configure o ambiente da AWS.
 
-<p align="right"><a href="#compass-uol">volte pra o inicio</a></p>
+<p align="right"><a href="#">volte pra o inicio</a></p>
 
 # Roadmap
 
@@ -155,7 +155,7 @@ docker-compose -f /home/ec2-user/docker-compose.yml up -d
   * [x] vincule os arquivos do container do wordpress ao um EFS.
 * [x] Configure um LoadBalancer, para ser o acesso da aplicação através do bastion.
 
-<p align="right"><a href="#compass-uol">volte pra o inicio</a></p>
+<p align="right"><a href="#">volte pra o inicio</a></p>
 
 # Contato
 
@@ -163,4 +163,4 @@ Lucas Emanoel - [@Lucas Barros](https://www.linkedin.com/in/lucas-barros-9790111
 
 Project Link: [Aws + Docker](https://github.com/LucasEmanoel/compass-docker.git)
 
-<p align="right"><a href="#compass-uol">volte pra o inicio</a></p>
+<p align="right"><a href="#">volte pra o inicio</a></p>
