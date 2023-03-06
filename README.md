@@ -21,7 +21,7 @@
   <h2 align="center">Atividade Prática</h2>
 
   <p align="center">
-    Iniciar uma instância na aws, configurar docker para WordPress e mysql!
+    Configurar um Bastion Host + Instância Privada na aws com docker para WordPress e MySql!
     <br />
     <a href="#"><strong>Explore a documentação »</strong></a>
     <br />
@@ -30,11 +30,11 @@
 </div>
 
 # Sobre o projeto
-O projeto consiste em rodar em dois containers dentro de uma instancia ec2, uma com WordPress e outra com MySql. Através de um Load Balancer usar como acesso das instancias, e em caso de escalar o ambiente podemos dividir as cargas.
+O projeto consiste em rodar em dois containers dentro de uma instancia ec2, uma com WordPress e outra com MySql. Através de um Load Balancer usar como acesso a instancia, invés de ip publico, e em caso de escalar o ambiente podemos dividir as cargas entre mais instancias.
 
-Colocar Imagem aqui
+![image](https://github.com/LucasEmanoel/assets/blob/master/atv-docker.png)
 
-embora descrito, nao utilizaremos o auto scaling group para esse tutorial. 
+Embora descrito, nao utilizaremos o auto scaling group para esse tutorial. 
 
 # Release 1.0.0
 
@@ -134,7 +134,7 @@ mkdir -p /mnt/efs/lucas-emanoel/var/www/html
 docker-compose -f /home/ec2-user/docker-compose.yml up -d
 ```
 1. Vamos fazer o Download do arquivo docker-compose. 
-2. Iremos criar a pasta para caso ela nao exista no EFS
+2. Iremos criar a pasta no EFS
 3. Por fim, rodaremos o docker compose.
 
  # Uso
@@ -147,12 +147,13 @@ docker-compose -f /home/ec2-user/docker-compose.yml up -d
 
 # Roadmap
 
-* [x] Inicie uma Instancia Aws - t3.small - 16gb SSD - Sem IP Publico.
-* [x] Configure script user_data.
+* [x] Bastion: Inicie uma Instancia Aws - t3.small - 16gb SSD - IP Publico - Subnet Publica com IGW.
+* [x] Server: Inicie uma Instancia Aws - t3.small - 16gb SSD - Sem IP Publico - Subnet Privada com NAT.
+* [x] Configure script user_data do server.
   * [x] Configure o docker e docker-compose no host.
   * [x] Crie um file docker-compose.yml, com wordpress e mysql. 
-  * [] vincule os arquivos do container do wordpress ao um EFS.
-* [] Configure um LoadBalancer, para ser o acesso da aplicação.
+  * [x] vincule os arquivos do container do wordpress ao um EFS.
+* [x] Configure um LoadBalancer, para ser o acesso da aplicação através do bastion.
 
 <p align="right"><a href="#compass-uol">volte pra o inicio</a></p>
 
