@@ -30,15 +30,22 @@
 </div>
 
 # Sobre o projeto
-O projeto consiste em rodar em dois containers dentro de uma instancia ec2, uma com WordPress e outra com MySql. Através de um Load Balancer usar como acesso a instancia, invés de ip publico, e em caso de escalar o ambiente podemos dividir as cargas entre mais instancias.
+O projeto consiste em rodar em dois containers dentro de uma instancia ec2 em uma subnet privada e utilizar uma outra EC2 para servir de Bastion Host e ter acesso a os serviços disponibilizados nos containers WordPress e MySql. Através de um Load Balancer usar DNS para acesso a instancia, invés de ip publico, e em caso de escalar o ambiente podemos dividir as cargas entre mais instancias.
 
 ![image](https://github.com/LucasEmanoel/assets/blob/master/atv-docker.png)
 
 Embora descrito, nao utilizaremos o auto scaling group para esse tutorial. 
 
+Vamos utilizar a estrutura de Bastion Host, onde vamos criar uma instancia para direcionar as requisicoes para uma instancia privada, onde tera o servidor WordPress de fato.
+
+Basicamente um Bastion Host funciona como servidor de segurança que é colocado em uma rede pública para proteger servidores privados em uma rede privada. O bastion host é configurado para permitir o acesso remoto apenas a partir de endereços IP especificados e através de protocolos de rede seguros, como SSH (Secure Shell).
+
+
+
 # Release 1.0.0
 
 ## Configurando o user_data
+- no user_data basicamente, inserimos os primeiros comandos que serão executados na instancia em sua criação, assim podendo instalar e configurar o ambiente de acordo com os requisitos.
 
 ```bash
 #!bin/bash
@@ -71,7 +78,7 @@ echo "fs-00551b6438692354b.efs.us-east-1.amazonaws.com:/ /mnt/efs nfs defaults 0
 # Release 2.0.0 
 ## Instalando MySql e WordPress via docker-compose.
 
-* Vamos configurar o docker-compose para instalar nosso serviço de banco de dados.
+* Vamos configurar o docker-compose.yml para instalar nosso serviço de banco de dados.
 
 ```yml
 version: '3.3'
@@ -123,7 +130,7 @@ networks:
 * para volumes passaremos o caminho onde nosso efs estará montado.
 * por fim devemos configurar o env do wordpress de acordo com o mysql.
 
-### Execução do docker-compose
+## Execução do docker-compose
 
 * Voltaremos ao user_data para executar o comando do docker compose sempre que a instancia for criada.
 
@@ -133,11 +140,64 @@ curl -sL https://raw.githubusercontent.com/LucasEmanoel/compass-docker/main/dock
 mkdir -p /mnt/efs/lucas-emanoel/var/www/html
 docker-compose -f /home/ec2-user/docker-compose.yml up -d
 ```
-1. Vamos fazer o Download do arquivo docker-compose. 
+1. Vamos fazer o Download do arquivo docker-compose, salvo no github. 
 2. Iremos criar a pasta no EFS
 3. Por fim, rodaremos o docker compose.
 
- # Uso
+
+## Ambiente Aws
+
+### Configurando VPC
+- Criando Subnet Publica
+    1. Crie um Internet Gateway(IGW)
+    2. Crie uma subnet publica
+    3. Associe um Target Group para: Subnet Publica com saída no IGW.
+
+- Criando Subnet Privada
+    1. Crie um Network Address Translation(NAT), utilizando o mesma AZ.
+    2. Crie uma subnet publica
+    3. Associe um Target Group para: Subnet Privada com saída no NAT.
+### Create EC2 Instances
+
+- Crie a instancia Bastion, na subnet publica de outra AZ.
+- Crie a instancia Server, na Subnet Privada Criada acima.
+### Security Groups
+- Server
+
+  | TCP  | UDP  |
+  |------|------|
+  | 22   |      |
+  | 80   |      |
+  | 443  |      |
+  | 111  | 111  |
+  | 3306 |      |
+  | 2049 | 2049 |    
+
+- Bastion Host
+
+  | TCP  | UDP  |
+  |------|------|
+  | 22   |      |
+
+### Target Groups
+- Criando Target Group
+    - Tipo Instance
+    - Protocolo HTTP:80
+    - HealthCheck: 200,302
+
+### LoadBalancer
+
+- Criando Load Balancer
+    - Aplication Load Balancer (ALB)
+    - Internet-Facing
+    - IPv4
+    - Crie um novo Security Group, Somente com a porta 80 Liberada.
+    - Associe ao target Group Criado.
+
+Ambiente configurado!!
+
+
+# Uso
 
 1. Copie o arquivo user_data.sh para o user_data na criação da instancia.
     * Launch Instances > Advanced details > User data.
