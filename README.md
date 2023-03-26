@@ -170,7 +170,6 @@ docker-compose -f /home/ec2-user/docker-compose.yml up -d
   | 80   |      |
   | 443  |      |
   | 111  | 111  |
-  | 3306 |      |
   | 2049 | 2049 |    
 
 - Bastion Host
